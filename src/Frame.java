@@ -4,98 +4,93 @@ import java.awt.event.*;
 import java.util.*;
 
 public class Frame extends JFrame {
-		
-	private FileController fileCon;
+
+	private FileController fileCon = new FileController();
 
 	private boolean editMode = false;
 	private Date editTime;
-	
+	private String fileName;	// 目前選到的貼文標題
+	String titleName;	// 新貼文標題
+
 	// 初始畫面
-	private JLabel headField;	// 標題
-	private JLabel dateField;	// 日期
-	private JPanel headPanel;
-	
-	private JTextArea articleField;	// 文章區
+	private JLabel dateField = new JLabel();	// 日期
+	private JPanel headPanel = new JPanel();	// 標題panel
+
+	// combo box選擇貼文
+	private JComboBox<String> chooseArticle;
+	String[] titles;
+	private int article;	// 抓combobox事件
+
+	private JTextArea articleField = new JTextArea();	// 文章區
 	private boolean isLike = false;
-	
-	private JLabel heartLabel;		// 愛心
+
+	private JLabel heartLabel = new JLabel();		// 愛心
 	private Icon heartEmpty;		// 空愛心
 	private Icon heartFilled;		// 紅愛心
-	private JButton editButton;		// 編輯按鈕
-	private JButton newButton;		// 新貼文按鈕
-	
+	private JButton newButton = new JButton("New Post");	// 新貼文按鈕
+
 	// 編輯畫面
-	private JButton saveButton;		// 儲存按鈕
-	private JButton saveAsButton;	// 另存內容按鈕
-	private JButton importButton;	// 匯入內容按鈕
-	private JButton cancelButton;	// 取消按鈕
-	
-	private JPanel buttonPanel;
-	private JPanel allPanel;
+	private JButton saveButton = new JButton("Save");		// 儲存按鈕
+	private JButton saveAsButton = new JButton("Save as");	// 另存內容按鈕
+	private JButton importButton = new JButton("Import");	// 匯入內容按鈕
+	private JButton cancelButton = new JButton("Cancel");	// 取消按鈕
+
+	private JPanel buttonPanel = new JPanel();
+	private JPanel allPanel = new JPanel();
 
 	public Frame () {
-		
+
 		super("公告系統");
-		
-		fileCon = new FileController();
-		
+		fileName = "HW1 Paint GUI";
+
 		// panels
-		headPanel = new JPanel();
 		headPanel.setBackground(Color.yellow);
-		buttonPanel = new JPanel();
 		buttonPanel.setBackground(Color.yellow);
-		allPanel = new JPanel();
 		allPanel.setLayout(new BorderLayout());
+
+		// 日期
+		dateField.setText(String.format("%s", fileCon.readPost(fileName).getEditTime()));
+
+		// combobox
+		titles = fileCon.readPostTxt();
+		chooseArticle = new JComboBox<String>(titles);
+		ComboBoxListener c = new ComboBoxListener();
+		chooseArticle.addActionListener(c);
 		
-		// title
-		headField = new JLabel();
-		headField.setText("進JA助教");
-		dateField = new JLabel();
-		dateField.setText(String.format("%s", fileCon.ReadPost().getEditTime()));
-		headPanel.add(headField);
+		// title區
+		headPanel.add(chooseArticle);
 		headPanel.add(dateField);
 		allPanel.add(headPanel, BorderLayout.NORTH);
-		
+
 		// post
-		articleField = new JTextArea();
 		articleField.setEditable(false);
 		articleField.setBackground(Color.yellow);
-		articleField.setText(String.format("%s", fileCon.ReadPost().getContent()));
+		articleField.setText(String.format("%s", fileCon.readPost(fileName).getContent()));
 		allPanel.add(articleField, BorderLayout.CENTER);
-		
+
 		// 按鈕設定
 		heartEmpty = new ImageIcon(getClass().getResource("unlike.png"));
 		heartFilled = new ImageIcon(getClass().getResource("like.png"));
-		heartLabel = new JLabel();
-		LikeChange();
-		editButton = new JButton("編輯");
-		newButton = new JButton("全新貼文");
+		likeChange();
+
 		// JButton Listener
-		editButton.addActionListener(new ButtonListener());
 		newButton.addActionListener(new ButtonListener());
-		buttonPanel.add(heartLabel);
-		buttonPanel.add(editButton);
-		buttonPanel.add(newButton);
-		allPanel.add(buttonPanel, BorderLayout.SOUTH);
-		
-		// 編輯時出現的按鈕
-		saveButton = new JButton("儲存");	
-		saveAsButton = new JButton("另存內容");
-		importButton = new JButton("匯入內容");
-		cancelButton = new JButton("取消");	
-		// button listener
 		saveButton.addActionListener(new ButtonListener());
 		saveAsButton.addActionListener(new ButtonListener());
 		importButton.addActionListener(new ButtonListener());
 		cancelButton.addActionListener(new ButtonListener());
-		
+
+		// 按鈕區
+		buttonPanel.add(heartLabel);
+		buttonPanel.add(newButton);
+		allPanel.add(buttonPanel, BorderLayout.SOUTH);
+
 		add(allPanel);
-		
+
 		// 是否為發布者
 		if (Main.editor) {
 			heartLabel.setEnabled(false);
 		} else {
-			editButton.setVisible(false);
 			newButton.setVisible(false);
 			heartLabel.addMouseListener(
 				new MouseAdapter() {
@@ -103,20 +98,23 @@ public class Frame extends JFrame {
 					public void mouseClicked(MouseEvent e) {
 						if (heartLabel.getIcon() == heartEmpty) {
 							isLike = true;
-							fileCon.Save(articleField.getText(), isLike, editTime);
+							fileCon.save(articleField.getText(), isLike, fileCon.readPost(fileName).getEditTime(), fileName);
 						} else {
 							isLike = false;
-							fileCon.Save(articleField.getText(), isLike, editTime);
+							fileCon.save(articleField.getText(), isLike, fileCon.readPost(fileName).getEditTime(), fileName);
 						}
-						fileCon.ReadPost();
-						LikeChange();
+						fileCon.readPost(fileName);
+						likeChange();
 					}
 				});
-		}				
+		}
 	}
-	
-	// edit method
-	private void Edit() {
+
+	// 改變模式時改變按鈕panel
+	private void EditChange() {
+
+		buttonPanel.removeAll();
+
 		if (editMode) {
 			// 可編輯文章
 			articleField.setBackground(Color.white);
@@ -129,70 +127,96 @@ public class Frame extends JFrame {
 		} else {
 			// 不可編輯文章
 			articleField.setBackground(Color.yellow);
-			articleField.setEditable(false);			
+			articleField.setEditable(false);
 			// 舊按鈕
 			buttonPanel.add(heartLabel);
-			buttonPanel.add(editButton);
 			buttonPanel.add(newButton);
 		}
-	}
-	
-	private void EditChange() {
-		buttonPanel.removeAll();
-		Edit();
+
 		buttonPanel.revalidate();
 		buttonPanel.repaint();
 	}
 	
-	private void LikeChange() {
-		if (fileCon.ReadPost().getIsLike())
+	// 抓愛心變化
+	private void likeChange() {
+		if (fileCon.readPost(fileName).getIsLike())
 			heartLabel.setIcon(heartFilled);
-		else if (!fileCon.ReadPost().getIsLike())
+		else if (!fileCon.readPost(fileName).getIsLike())
 			heartLabel.setIcon(heartEmpty);
 	}
-	
+
 	// JButton Listener
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			
-			if (event.getSource() == editButton) {
-				editMode = true;
-				EditChange();
-				return;
-			}
+			// 新貼文
 			if (event.getSource() == newButton) {
 				editMode = true;
+				titleName = JOptionPane.showInputDialog(null, "", "Enter file name");
+				if (titleName.equals(String.format("%d", JOptionPane.CANCEL_OPTION)))
+					editMode = false;
+				else {
+					chooseArticle.addItem(titleName);
+					chooseArticle.setSelectedItem(titleName);
+					chooseArticle.disable();
+				}				
 				articleField.setText("");
 				EditChange();
 				return;
 			}
+			// 儲存
 			if (event.getSource() == saveButton) {
 				editTime = new Date();
 				dateField.setText(String.format("%s", editTime));
-				fileCon.Save(articleField.getText(), isLike, editTime);
+				fileCon.save(articleField.getText(), false, editTime, titleName);
+				fileCon.savePostTxt(chooseArticle);
+				chooseArticle.enable();
 				editMode = false;
 				EditChange();
 				return;
 			}
-			if (event.getSource() == saveAsButton) {
-				editMode = false;
+			// 另存
+			if (event.getSource() == saveAsButton) {				
 				editTime = new Date();
-				dateField.setText(String.format("%s", editTime));
-				fileCon.SaveAs(articleField);
-				EditChange();
-				return;
-			}
-			if (event.getSource() == importButton) {
-				fileCon.OpenFile(articleField);
-				return;
-			}
-			if (event.getSource() == cancelButton) {
-				articleField.setText(String.format("%s", fileCon.ReadPost().getContent()));
+				dateField.setText(String.format("%s", fileCon.readPost(fileName).getEditTime()));
+				fileCon.saveAs(articleField);
+				fileCon.save(articleField.getText(), false, editTime, titleName);
+				fileCon.savePostTxt(chooseArticle);
+				chooseArticle.enable();
 				editMode = false;
-				EditChange();
+				EditChange();			
 				return;
 			}
+			// 匯入
+			if (event.getSource() == importButton) {
+				fileCon.openFile(articleField);
+				return;
+			}
+			// 取消
+			if (event.getSource() == cancelButton) {		
+				articleField.setText(String.format("%s", fileCon.readPost(fileName).getContent()));
+				chooseArticle.removeItemAt(chooseArticle.getItemCount()-1);
+				chooseArticle.setSelectedItem(fileName);
+				chooseArticle.enable();
+				editMode = false;
+				EditChange();				
+				return;
+			}
+		}
+	}
+
+	// combobox listener
+	private class ComboBoxListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			if (!editMode)
+				fileName = chooseArticle.getSelectedItem().toString();
+			articleField.setText("");
+			articleField.setText(String.format("%s", fileCon.readPost(fileName).getContent()));
+			dateField.setText("");
+			dateField.setText(String.format("%s", fileCon.readPost(fileName).getEditTime()));
+			likeChange();
 		}
 	}
 
