@@ -1,3 +1,5 @@
+// Author: YICHIN HO
+
 import java.io.*;
 import java.nio.file.*;
 import javax.swing.*;
@@ -15,7 +17,7 @@ public class FileController {
 
 	public FileController() {}
 
-	// Åª¤Jpost
+	// è®€å…¥post
 	public PostSerializable readPost(String fileName) {
 		try {
 			input = new ObjectInputStream(Files.newInputStream(Paths.get(fileName)));
@@ -31,7 +33,7 @@ public class FileController {
 		return p;
 	}
 
-	// Åª¤Jpost.txt
+	// è®€å…¥post.txt
 	public String[] readPostTxt() {
 		try {
 			File filename = new File("posts.txt");
@@ -49,7 +51,7 @@ public class FileController {
 		}
 	}
 
-	// ¶×¤J
+	// åŒ¯å…¥
 	public void openFile(JTextArea text) {
 		File file = getOpenFile();
 		Scanner write;
@@ -70,7 +72,7 @@ public class FileController {
 		}
 	}
 
-	// ±N¼ĞÃD¦s¤Jposts.txt
+	// å°‡æ¨™é¡Œå­˜å…¥posts.txt
 	public void savePostTxt(JComboBox comboBox) {
 		File file = new File("posts.txt");
 		try {
@@ -85,7 +87,7 @@ public class FileController {
 		}
 	}
 
-	// Àx¦s
+	// å„²å­˜
 	public void save(String content, boolean isLike, Date editTime, String fileName) {
 		try {
 			output = new ObjectOutputStream(Files.newOutputStream(Paths.get(fileName)));
@@ -98,7 +100,7 @@ public class FileController {
 		}
 	}
 
-	// ¥t¦s
+	// å¦å­˜
 	public void saveAs(JTextArea text) {
 		File file = getSaveFile();
 		if (file != null) {
@@ -112,7 +114,7 @@ public class FileController {
 		}
 	}
 
-	// ¨ú±o¶}±ÒÀÉ®×¸ô®|
+	// å–å¾—é–‹å•Ÿæª”æ¡ˆè·¯å¾‘
 	private File getOpenFile() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -123,7 +125,7 @@ public class FileController {
 			return fileChooser.getSelectedFile();
 	}
 
-	// ¨ú±oÀx¦sÀÉ®×¸ô®|
+	// å–å¾—å„²å­˜æª”æ¡ˆè·¯å¾‘
 	private File getSaveFile() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
