@@ -1,4 +1,5 @@
-// ±K½Xµn¤J¥\¯à¡G±K½X¬°123
+// Author: YICHIN HO
+// å¯†ç¢¼ç™»å…¥åŠŸèƒ½ï¼šå¯†ç¢¼ç‚º123
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -10,17 +11,17 @@ public class Main {
 	
 	public static void main(String[]args) {	
 		
-		// µn¤J°T®§
-		int opt = JOptionPane.showConfirmDialog(null, "¬O§_¬°µo¥¬ªÌ?", "µn¤J", JOptionPane.YES_NO_CANCEL_OPTION);
-		// §PÂ_¬OeditorÁÙ¬Oviewer
+		// ç™»å…¥è¨Šæ¯
+		int opt = JOptionPane.showConfirmDialog(null, "æ˜¯å¦ç‚ºç™¼å¸ƒè€…?", "ç™»å…¥", JOptionPane.YES_NO_CANCEL_OPTION);
+		// åˆ¤æ–·æ˜¯editoré‚„æ˜¯viewer
 		if(opt == JOptionPane.YES_OPTION) {
-			// ±K½X
-			String password = JOptionPane.showInputDialog("¿é¤J±K½X: ");
+			// å¯†ç¢¼
+			String password = JOptionPane.showInputDialog("è¼¸å…¥å¯†ç¢¼: ");
 			if (password.equals("123")) {
-				JOptionPane.showMessageDialog(null, "µn¤J¦¨¥\", "±K½X¥¿½T", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, "ç™»å…¥æˆåŠŸ", "å¯†ç¢¼æ­£ç¢º", JOptionPane.PLAIN_MESSAGE);
 				editor = true;
 			} else {
-				JOptionPane.showMessageDialog(null, "±K½X¿ù»~", "¿ù»~", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "å¯†ç¢¼éŒ¯èª¤", "éŒ¯èª¤", JOptionPane.ERROR_MESSAGE);
 				System.exit(0);
 			}
 		} else if (opt == JOptionPane.NO_OPTION)
