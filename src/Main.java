@@ -1,3 +1,5 @@
+// Author: YICHIN HO
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -8,9 +10,9 @@ public class Main {
 
 	public static void main(String[]args) {
 
-		// µn¤J°T®§
-		int opt = JOptionPane.showConfirmDialog(null, "¬O§_¬°µo¥¬ªÌ?", "µn¤J", JOptionPane.YES_NO_CANCEL_OPTION);
-		// §PÂ_¬OeditorÁÙ¬Oviewer
+		// ç™»å…¥è¨Šæ¯
+		int opt = JOptionPane.showConfirmDialog(null, "æ˜¯å¦ç‚ºç™¼å¸ƒè€…?", "ç™»å…¥", JOptionPane.YES_NO_CANCEL_OPTION);
+		// åˆ¤æ–·æ˜¯editoré‚„æ˜¯viewer
 		if(opt == JOptionPane.YES_OPTION)
 			editor = true;
 		else if (opt == JOptionPane.NO_OPTION)
