@@ -1,3 +1,5 @@
+// Author: YICHIN HO
+
 import java.io.Serializable;
 import java.util.Date;
 
