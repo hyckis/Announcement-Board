@@ -1,3 +1,5 @@
+// Author: YICHIN HO
+
 import java.io.*;
 import java.nio.file.*;
 import javax.swing.*;
@@ -13,7 +15,7 @@ public class FileController {
 		p = new PostSerializable();
 	}
 	
-	// Åª¤Jpost
+	// è®€å…¥post
 	public PostSerializable ReadPost() {
 		try {
 			input = new ObjectInputStream(Files.newInputStream(Paths.get("post")));
@@ -29,7 +31,7 @@ public class FileController {
 		return p;
 	}
 	
-	// ¶×¤J
+	// åŒ¯å…¥
 	public void OpenFile(JTextArea text) {		
 		File file = getOpenFile();
 		Scanner write;	
@@ -50,7 +52,7 @@ public class FileController {
 		}
 	}
 	
-	// Àx¦s
+	// å„²å­˜
 	public void Save(String content, boolean isLike, Date editTime) {	
 		try {
 			output = new ObjectOutputStream(Files.newOutputStream(Paths.get("post")));
@@ -63,7 +65,7 @@ public class FileController {
 		}
 	}
 
-	// ¥t¦s
+	// å¦å­˜
 	public void SaveAs(JTextArea text) {
 		File file = getSaveFile();
 		if (file != null) {
@@ -77,7 +79,7 @@ public class FileController {
 		}		
 	}
 	
-	// ¨ú±o¶}±ÒÀÉ®×¸ô®|
+	// å–å¾—é–‹å•Ÿæª”æ¡ˆè·¯å¾‘
 	private File getOpenFile() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -88,7 +90,7 @@ public class FileController {
 			return fileChooser.getSelectedFile();		
 	}
 	
-	// ¨ú±oÀx¦sÀÉ®×¸ô®|
+	// å–å¾—å„²å­˜æª”æ¡ˆè·¯å¾‘
 	private File getSaveFile() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
