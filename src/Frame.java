@@ -1,3 +1,5 @@
+// Author: YICHIN HO
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,32 +12,32 @@ public class Frame extends JFrame {
 	private boolean editMode = false;
 	private Date editTime;
 	
-	// ªì©lµe­±
-	private JLabel headField;	// ¼ĞÃD
-	private JLabel dateField;	// ¤é´Á
+	// åˆå§‹ç•«é¢
+	private JLabel headField;	// æ¨™é¡Œ
+	private JLabel dateField;	// æ—¥æœŸ
 	private JPanel headPanel;
 	
-	private JTextArea articleField;	// ¤å³¹°Ï
+	private JTextArea articleField;	// æ–‡ç« å€
 	private boolean isLike = false;
 	
-	private JLabel heartLabel;		// ·R¤ß
-	private Icon heartEmpty;		// ªÅ·R¤ß
-	private Icon heartFilled;		// ¬õ·R¤ß
-	private JButton editButton;		// ½s¿è«ö¶s
-	private JButton newButton;		// ·s¶K¤å«ö¶s
+	private JLabel heartLabel;		// æ„›å¿ƒ
+	private Icon heartEmpty;		// ç©ºæ„›å¿ƒ
+	private Icon heartFilled;		// ç´…æ„›å¿ƒ
+	private JButton editButton;		// ç·¨è¼¯æŒ‰éˆ•
+	private JButton newButton;		// æ–°è²¼æ–‡æŒ‰éˆ•
 	
-	// ½s¿èµe­±
-	private JButton saveButton;		// Àx¦s«ö¶s
-	private JButton saveAsButton;	// ¥t¦s¤º®e«ö¶s
-	private JButton importButton;	// ¶×¤J¤º®e«ö¶s
-	private JButton cancelButton;	// ¨ú®ø«ö¶s
+	// ç·¨è¼¯ç•«é¢
+	private JButton saveButton;		// å„²å­˜æŒ‰éˆ•
+	private JButton saveAsButton;	// å¦å­˜å…§å®¹æŒ‰éˆ•
+	private JButton importButton;	// åŒ¯å…¥å…§å®¹æŒ‰éˆ•
+	private JButton cancelButton;	// å–æ¶ˆæŒ‰éˆ•
 	
 	private JPanel buttonPanel;
 	private JPanel allPanel;
 
 	public Frame () {
 		
-		super("¤½§i¨t²Î");
+		super("å…¬å‘Šç³»çµ±");
 		
 		fileCon = new FileController();
 		
@@ -49,7 +51,7 @@ public class Frame extends JFrame {
 		
 		// title
 		headField = new JLabel();
-		headField.setText("¶iJA§U±Ğ");
+		headField.setText("é€²JAåŠ©æ•™");
 		dateField = new JLabel();
 		dateField.setText(String.format("%s", fileCon.ReadPost().getEditTime()));
 		headPanel.add(headField);
@@ -63,13 +65,13 @@ public class Frame extends JFrame {
 		articleField.setText(String.format("%s", fileCon.ReadPost().getContent()));
 		allPanel.add(articleField, BorderLayout.CENTER);
 		
-		// «ö¶s³]©w
+		// æŒ‰éˆ•è¨­å®š
 		heartEmpty = new ImageIcon(getClass().getResource("unlike.png"));
 		heartFilled = new ImageIcon(getClass().getResource("like.png"));
 		heartLabel = new JLabel();
 		LikeChange();
-		editButton = new JButton("½s¿è");
-		newButton = new JButton("¥ş·s¶K¤å");
+		editButton = new JButton("ç·¨è¼¯");
+		newButton = new JButton("å…¨æ–°è²¼æ–‡");
 		// JButton Listener
 		editButton.addActionListener(new ButtonListener());
 		newButton.addActionListener(new ButtonListener());
@@ -78,11 +80,11 @@ public class Frame extends JFrame {
 		buttonPanel.add(newButton);
 		allPanel.add(buttonPanel, BorderLayout.SOUTH);
 		
-		// ½s¿è®É¥X²{ªº«ö¶s
-		saveButton = new JButton("Àx¦s");	
-		saveAsButton = new JButton("¥t¦s¤º®e");
-		importButton = new JButton("¶×¤J¤º®e");
-		cancelButton = new JButton("¨ú®ø");	
+		// ç·¨è¼¯æ™‚å‡ºç¾çš„æŒ‰éˆ•
+		saveButton = new JButton("å„²å­˜");	
+		saveAsButton = new JButton("å¦å­˜å…§å®¹");
+		importButton = new JButton("åŒ¯å…¥å…§å®¹");
+		cancelButton = new JButton("å–æ¶ˆ");	
 		// button listener
 		saveButton.addActionListener(new ButtonListener());
 		saveAsButton.addActionListener(new ButtonListener());
@@ -91,7 +93,7 @@ public class Frame extends JFrame {
 		
 		add(allPanel);
 		
-		// ¬O§_¬°µo¥¬ªÌ
+		// æ˜¯å¦ç‚ºç™¼å¸ƒè€…
 		if (Main.editor) {
 			heartLabel.setEnabled(false);
 		} else {
@@ -118,19 +120,19 @@ public class Frame extends JFrame {
 	// edit method
 	private void Edit() {
 		if (editMode) {
-			// ¥i½s¿è¤å³¹
+			// å¯ç·¨è¼¯æ–‡ç« 
 			articleField.setBackground(Color.white);
 			articleField.setEditable(true);
-			// ·s«ö¶s
+			// æ–°æŒ‰éˆ•
 			buttonPanel.add(saveButton);
 			buttonPanel.add(saveAsButton);
 			buttonPanel.add(importButton);
 			buttonPanel.add(cancelButton);
 		} else {
-			// ¤£¥i½s¿è¤å³¹
+			// ä¸å¯ç·¨è¼¯æ–‡ç« 
 			articleField.setBackground(Color.yellow);
 			articleField.setEditable(false);			
-			// ÂÂ«ö¶s
+			// èˆŠæŒ‰éˆ•
 			buttonPanel.add(heartLabel);
 			buttonPanel.add(editButton);
 			buttonPanel.add(newButton);
