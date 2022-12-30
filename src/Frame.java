@@ -1,3 +1,5 @@
+// Author: YICHIN HO
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -9,38 +11,38 @@ public class Frame extends JFrame {
 
 	private boolean editMode = false;
 	private Date editTime;
-	private String fileName;	// ¥Ø«e¿ï¨ìªº¶K¤å¼ĞÃD
-	String titleName;	// ·s¶K¤å¼ĞÃD
+	private String fileName;	// ç›®å‰é¸åˆ°çš„è²¼æ–‡æ¨™é¡Œ
+	String titleName;	// æ–°è²¼æ–‡æ¨™é¡Œ
 
-	// ªì©lµe­±
-	private JLabel dateField = new JLabel();	// ¤é´Á
-	private JPanel headPanel = new JPanel();	// ¼ĞÃDpanel
+	// åˆå§‹ç•«é¢
+	private JLabel dateField = new JLabel();	// æ—¥æœŸ
+	private JPanel headPanel = new JPanel();	// æ¨™é¡Œpanel
 
-	// combo box¿ï¾Ü¶K¤å
+	// combo boxé¸æ“‡è²¼æ–‡
 	private JComboBox<String> chooseArticle;
 	String[] titles;
-	private int article;	// §ìcombobox¨Æ¥ó
+	private int article;	// æŠ“comboboxäº‹ä»¶
 
-	private JTextArea articleField = new JTextArea();	// ¤å³¹°Ï
+	private JTextArea articleField = new JTextArea();	// æ–‡ç« å€
 	private boolean isLike = false;
 
-	private JLabel heartLabel = new JLabel();		// ·R¤ß
-	private Icon heartEmpty;		// ªÅ·R¤ß
-	private Icon heartFilled;		// ¬õ·R¤ß
-	private JButton newButton = new JButton("New Post");	// ·s¶K¤å«ö¶s
+	private JLabel heartLabel = new JLabel();		// æ„›å¿ƒ
+	private Icon heartEmpty;		// ç©ºæ„›å¿ƒ
+	private Icon heartFilled;		// ç´…æ„›å¿ƒ
+	private JButton newButton = new JButton("New Post");	// æ–°è²¼æ–‡æŒ‰éˆ•
 
-	// ½s¿èµe­±
-	private JButton saveButton = new JButton("Save");		// Àx¦s«ö¶s
-	private JButton saveAsButton = new JButton("Save as");	// ¥t¦s¤º®e«ö¶s
-	private JButton importButton = new JButton("Import");	// ¶×¤J¤º®e«ö¶s
-	private JButton cancelButton = new JButton("Cancel");	// ¨ú®ø«ö¶s
+	// ç·¨è¼¯ç•«é¢
+	private JButton saveButton = new JButton("Save");		// å„²å­˜æŒ‰éˆ•
+	private JButton saveAsButton = new JButton("Save as");	// å¦å­˜å…§å®¹æŒ‰éˆ•
+	private JButton importButton = new JButton("Import");	// åŒ¯å…¥å…§å®¹æŒ‰éˆ•
+	private JButton cancelButton = new JButton("Cancel");	// å–æ¶ˆæŒ‰éˆ•
 
 	private JPanel buttonPanel = new JPanel();
 	private JPanel allPanel = new JPanel();
 
 	public Frame () {
 
-		super("¤½§i¨t²Î");
+		super("å…¬å‘Šç³»çµ±");
 		fileName = "HW1 Paint GUI";
 
 		// panels
@@ -48,7 +50,7 @@ public class Frame extends JFrame {
 		buttonPanel.setBackground(Color.yellow);
 		allPanel.setLayout(new BorderLayout());
 
-		// ¤é´Á
+		// æ—¥æœŸ
 		dateField.setText(String.format("%s", fileCon.readPost(fileName).getEditTime()));
 
 		// combobox
@@ -57,7 +59,7 @@ public class Frame extends JFrame {
 		ComboBoxListener c = new ComboBoxListener();
 		chooseArticle.addActionListener(c);
 		
-		// title°Ï
+		// titleå€
 		headPanel.add(chooseArticle);
 		headPanel.add(dateField);
 		allPanel.add(headPanel, BorderLayout.NORTH);
@@ -68,7 +70,7 @@ public class Frame extends JFrame {
 		articleField.setText(String.format("%s", fileCon.readPost(fileName).getContent()));
 		allPanel.add(articleField, BorderLayout.CENTER);
 
-		// «ö¶s³]©w
+		// æŒ‰éˆ•è¨­å®š
 		heartEmpty = new ImageIcon(getClass().getResource("unlike.png"));
 		heartFilled = new ImageIcon(getClass().getResource("like.png"));
 		likeChange();
@@ -80,14 +82,14 @@ public class Frame extends JFrame {
 		importButton.addActionListener(new ButtonListener());
 		cancelButton.addActionListener(new ButtonListener());
 
-		// «ö¶s°Ï
+		// æŒ‰éˆ•å€
 		buttonPanel.add(heartLabel);
 		buttonPanel.add(newButton);
 		allPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		add(allPanel);
 
-		// ¬O§_¬°µo¥¬ªÌ
+		// æ˜¯å¦ç‚ºç™¼å¸ƒè€…
 		if (Main.editor) {
 			heartLabel.setEnabled(false);
 		} else {
@@ -110,25 +112,25 @@ public class Frame extends JFrame {
 		}
 	}
 
-	// §ïÅÜ¼Ò¦¡®É§ïÅÜ«ö¶spanel
+	// æ”¹è®Šæ¨¡å¼æ™‚æ”¹è®ŠæŒ‰éˆ•panel
 	private void EditChange() {
 
 		buttonPanel.removeAll();
 
 		if (editMode) {
-			// ¥i½s¿è¤å³¹
+			// å¯ç·¨è¼¯æ–‡ç« 
 			articleField.setBackground(Color.white);
 			articleField.setEditable(true);
-			// ·s«ö¶s
+			// æ–°æŒ‰éˆ•
 			buttonPanel.add(saveButton);
 			buttonPanel.add(saveAsButton);
 			buttonPanel.add(importButton);
 			buttonPanel.add(cancelButton);
 		} else {
-			// ¤£¥i½s¿è¤å³¹
+			// ä¸å¯ç·¨è¼¯æ–‡ç« 
 			articleField.setBackground(Color.yellow);
 			articleField.setEditable(false);
-			// ÂÂ«ö¶s
+			// èˆŠæŒ‰éˆ•
 			buttonPanel.add(heartLabel);
 			buttonPanel.add(newButton);
 		}
@@ -137,7 +139,7 @@ public class Frame extends JFrame {
 		buttonPanel.repaint();
 	}
 	
-	// §ì·R¤ßÅÜ¤Æ
+	// æŠ“æ„›å¿ƒè®ŠåŒ–
 	private void likeChange() {
 		if (fileCon.readPost(fileName).getIsLike())
 			heartLabel.setIcon(heartFilled);
@@ -149,7 +151,7 @@ public class Frame extends JFrame {
 	private class ButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			// ·s¶K¤å
+			// æ–°è²¼æ–‡
 			if (event.getSource() == newButton) {
 				editMode = true;
 				titleName = JOptionPane.showInputDialog(null, "", "Enter file name");
@@ -164,7 +166,7 @@ public class Frame extends JFrame {
 				EditChange();
 				return;
 			}
-			// Àx¦s
+			// å„²å­˜
 			if (event.getSource() == saveButton) {
 				editTime = new Date();
 				dateField.setText(String.format("%s", editTime));
@@ -175,7 +177,7 @@ public class Frame extends JFrame {
 				EditChange();
 				return;
 			}
-			// ¥t¦s
+			// å¦å­˜
 			if (event.getSource() == saveAsButton) {				
 				editTime = new Date();
 				dateField.setText(String.format("%s", fileCon.readPost(fileName).getEditTime()));
@@ -187,12 +189,12 @@ public class Frame extends JFrame {
 				EditChange();			
 				return;
 			}
-			// ¶×¤J
+			// åŒ¯å…¥
 			if (event.getSource() == importButton) {
 				fileCon.openFile(articleField);
 				return;
 			}
-			// ¨ú®ø
+			// å–æ¶ˆ
 			if (event.getSource() == cancelButton) {		
 				articleField.setText(String.format("%s", fileCon.readPost(fileName).getContent()));
 				chooseArticle.removeItemAt(chooseArticle.getItemCount()-1);
